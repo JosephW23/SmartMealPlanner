@@ -5,7 +5,11 @@
 - **Kaggle RecipeNLG Database**: https://www.kaggle.com/datasets/saldenisov/recipenlg
 - **Branded Food Database**: https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_branded_food_csv_2024-10-31.zip
 
-# Milestone 2
+# Milestone links
+
+-[Milestone 2](https://github.com/JosephW23/SmartMealPlanner/tree/Milestone2)
+
+# Milestone 2 Description
 
 ### Explain what your AI agent does in terms of PEAS.  What is the "world" like?
 **Performance**
