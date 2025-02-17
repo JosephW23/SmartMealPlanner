@@ -7,7 +7,7 @@
 
 # Milestone links
 
--[Milestone 2](https://github.com/JosephW23/SmartMealPlanner/tree/Milestone2)
+- ### [Milestone 2](https://github.com/JosephW23/SmartMealPlanner/tree/Milestone2)
 
 # Milestone 2 Description
 
