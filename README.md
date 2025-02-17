@@ -1,6 +1,9 @@
 # SmartMealPlanner
 - Joseph Whiteman, David Sanchez
 
+## Links to our Milestones: 
+- [Milestone 2](https://github.com/JosephW23/SmartMealPlanner/blob/main/Main.ipynb)
+
 ### Datasets
 - **Kaggle RecipeNLG Database**: https://www.kaggle.com/datasets/saldenisov/recipenlg
 - **Branded Food Database**: https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_branded_food_csv_2024-10-31.zip
