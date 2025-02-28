@@ -67,8 +67,9 @@ Our first plan was to use an ingredient price API, but further working on the pr
 
 **Questions asked ChatGPT**
 1. "We're developing a Bayesian Network based on nutrition and cost, but we do not have a free-to-use ingredient cost API.  What is another way we can build a Bayesian Network using recipe data?  We have access to certain nutritional values, ingredient lists, and their respective recipes."
-   
-> (o3-mini-high) Response: You can sidestep the need for a cost API by leveraging the recipe data you already have to infer cost estimates indirectly. Here are a few approaches:
+
+**(o3-mini-high) Response:**<br />
+> You can sidestep the need for a cost API by leveraging the recipe data you already have to infer cost estimates indirectly. Here are a few approaches:
 
 > Latent Variable Modeling:
 > Treat cost as a latent (hidden) variable in your Bayesian Network. If you have any recipes where total cost is known (even if it's just a few examples), you can use those to learn the relationships between ingredient presence, nutritional values, and overall cost. Once the network is trained, it can estimate cost for new recipes based solely on their ingredients and nutritional profiles.
@@ -83,15 +84,16 @@ Our first plan was to use an ingredient price API, but further working on the pr
 
 2. "Is the proxy of balancing the number of ingredients and substituting our loss of financial cost as a balancing factor a reasonable idea?"
 
-- (o3-mini-high) Response: Using the number of ingredients as a proxy can be a reasonable starting point, especially if you lack direct financial data. However, there are some important considerations:
+**(o3-mini-high) Response:** <br /> 
+> Using the number of ingredients as a proxy can be a reasonable starting point, especially if you lack direct financial data. However, there are some important considerations:
 
-Correlation vs. Causation:
-The number of ingredients might correlate with cost (e.g., more ingredients can mean higher cost), but this isn't always the case. A recipe with fewer, high-cost ingredients might be more expensive than one with many low-cost ingredients.
+> Correlation vs. Causation:
+> The number of ingredients might correlate with cost (e.g., more ingredients can mean higher cost), but this isn't always the case. A recipe with fewer, high-cost ingredients might be more expensive than one with many low-cost ingredients.
 
-Ingredient Variability:
-Not all ingredients have the same cost impact. You might consider weighting ingredients differently if you have some data on their typical cost ranges or nutritional value correlations.
+> Ingredient Variability:
+> Not all ingredients have the same cost impact. You might consider weighting ingredients differently if you have some data on their typical cost ranges or nutritional value correlations.
 
-Model Flexibility:
-Treating cost as a latent or proxy variable is a valid approach in a Bayesian Network. As you collect more data or refine your proxies, you can update the network to reflect a more nuanced view of cost.
+> Model Flexibility:
+> Treating cost as a latent or proxy variable is a valid approach in a Bayesian Network. As you collect more data or refine your proxies, you can update the network to reflect a more nuanced view of cost.
 
-In summary, balancing the number of ingredients as a proxy for financial cost is a reasonable idea as long as you're aware of its limitations and are open to refining your approach with additional data or weighting factors when possible.
+> In summary, balancing the number of ingredients as a proxy for financial cost is a reasonable idea as long as you're aware of its limitations and are open to refining your approach with additional data or weighting factors when possible.
