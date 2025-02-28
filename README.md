@@ -11,7 +11,7 @@
 # Milestone 2
 
 ### Explain what your AI agent does in terms of PEAS.  What is the "world" like?
-**Performance**
+**Performance**\\
 Our agent aims to generate meal recommendations which balance nutritional quality (specifically calories, proteins, fats, and carbohydrates) with recipe simplicity (lower number of ingredients).  The concept of fewer ingredients indirectly and approximately supports our goal of optimizing nutritional meal plans while balancing financial constraints.
 
 **Environment**
