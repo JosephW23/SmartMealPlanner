@@ -11,7 +11,7 @@
 # Milestone 2
 
 ### Explain what your AI agent does in terms of PEAS.  What is the "world" like?
-**Performance**
+**Performance**<br />
 Our agent aims to generate meal recommendations which balance nutritional quality (specifically calories, proteins, fats, and carbohydrates) with recipe simplicity (lower number of ingredients).  The concept of fewer ingredients indirectly and approximately supports our goal of optimizing nutritional meal plans while balancing financial constraints.
 
 **Environment**<br />
@@ -19,10 +19,10 @@ The "world" is the recipe domain which contains datasets such as RecipeNLG and U
 
 The environment is yet to include necessary external and additional inputs, such as our goal of incorporating user dietary preferences.  
 
-**Actuators**
+**Actuators**<br />
 This agent and its outputs are its recommended meal plans for the user, acting by suggesting recipes for the user to cook to optimize their nutritional goals.
 
-**Sensors**
+**Sensors**<br />
 The agent is able to sense the world through the ingredients of the Kaggle RecipeNLG dataset and the nutritional data of the USDA FoodData Central dataset.  However, future versions will use user feedback as sensory information.
 
 ### What kind of agent is it?  Goal-based?  Utility-based?
