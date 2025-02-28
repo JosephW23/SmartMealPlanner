@@ -7,6 +7,16 @@
 
 # Milestone 2
 
+### Updates for Regrade (WIP do not submit):
+1. Must dos for code explanations:
+- Explain scipy.stats
+- Explain pgmpy.models import BayesianNetwork
+- Explain pgmpy.estimators import MaximumLikelihoodEstimator
+- Explain pgmpy.inference import VariableElimination
+- Explain pgmy.estimators import HillClimbSearch, K2Score (needed to fix the horrible structure of original Bayesian Network where everything was interdependent, this ensured no directed cycles in Bayesian Network).
+
+2. Must address direct comments in Gradescope
+
 ### Explain what your AI agent does in terms of PEAS.  What is the "world" like?
 **Performance**
 Our agent aims to generate meal recommendations which balance nutritional quality (specifically calories, proteins, fats, and carbohydrates) with recipe simplicity (lower number of ingredients).  The concept of fewer ingredients indirectly and approximately supports our goal of optimizing nutritional meal plans while balancing financial constraints.
