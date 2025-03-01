@@ -10,6 +10,94 @@
 
 # Milestone 2
 
+## Milestone 2 Regrade Updates
+### SciPy and pgmpy Usage in Bayesian Network Construction
+
+#### **1. `scipy.stats`**  
+The `scipy.stats` module in SciPy is a statistical library that includes functions for probability distributions, statistical tests, and descriptive statistics. It was used in our project to assess data distributions and create probability-based insights that are critical for the Bayesian Network construction.
+
+#### **2. `pgmpy.models import BayesianNetwork`**  
+`pgmpy.models.BayesianNetwork` is the fundamental class for building Bayesian Networks. It allows us to create a Directed Acyclic Graph (DAG) in which nodes represent variables and edges represent dependencies. The model structure is enhanced with algorithms such as **Hill Climb Search** and **K2 Score**, which we use in our project.
+
+#### **3. `pgmpy.estimators import MaximumLikelihoodEstimator`**  
+This estimator is used to generate **Conditional Probability Tables (CPTs)** for the Bayesian Network. Given the network structure and observed data, `MaximumLikelihoodEstimator` calculates the probability distributions for each node in the DAG based on its parents.
+
+#### **4. `pgmpy.inference import VariableElimination`**  
+An inference process called **Variable Elimination** aids in the Bayesian Network's response to probabilistic inquiries. To calculate conditional probabilities, it marginalizes variables that are not important. Given calorie limits, it was utilized in our project to identify the most likely **macronutrient composition category**.
+
+#### **5. `pgmpy.estimators import HillClimbSearch, K2Score`**  
+(Needed to fix the horrible structure of the original Bayesian Network, where everything was interdependent—this ensured no directed cycles in the Bayesian Network).  
+
+- **Hill Climb Search (HCS):** A structure-learning method that gradually refines the Bayesian Network by adding, deleting, or reversing edges in order to optimize a score function.  
+- **K2 Score:** A scoring function that evaluates the BN structure. It ensures correct DAG generation by eliminating cycles and increasing the likelihood of observed data.
+
+---
+
+### Bayesian Network Structure
+#### Nodes
+The Bayesian Network consists of the following nodes:
+
+- **`num_ingredients`** – Number of ingredients in a food item  
+- **`calorie_category`** – Categorized calorie levels  
+- **`protein_category`** – Categorized protein levels  
+- **`fat_category`** – Categorized fat levels  
+- **`carb_category`** – Categorized carbohydrate levels
+
+#### Directed Edges
+- num_ingredients → calorie_category  
+- num_ingredients → fat_category  
+- num_ingredients → protein_category  
+- num_ingredients → carb_category  
+- fat_category → calorie_category  
+- protein_category → fat_category  
+- protein_category → calorie_category  
+- carb_category → protein_category  
+- carb_category → calorie_category  
+- carb_category → fat_category
+
+Since there is no directed cycle in this graph, and thus this graph is a Directed Acyclic Graph, this results in a valid Bayesian Network formation.
+
+#### Generated Diagram:
+![](Diagram.png)
+
+### Data Preprocessing Overview
+
+#### Dataset Details
+
+- The dataset originates from recipeNLG.csv and USDA nutrient files.
+- Irrelevant columns such as link, source, and directions were dropped.
+- Ingredients were extracted and cleaned to remove measurement units and amounts.
+- A mapping system matched ingredient names to their USDA nutrient profile.
+
+#### Feature Engineering
+
+- num_ingredients: The count of ingredients in a recipe.
+- Macronutrients (calories, protein, fat, carbohydrates) were derived from USDA data.
+- Categories were created for these features using binning methods:
+  - calorie_category: Ranges 0-250 kcal, 250-500 kcal, etc.
+  - protein_category: Ranges 0-10g, 10-20g, etc.
+  - fat_category: Ranges 0-25g, 25-50g, etc.
+  - carb_category: Ranges 0-25g, 25-50g, etc.
+ 
+---
+
+### Machine Learning Estimation Explanation
+
+#### Structure Learning with Hill Climb Search (HCS)
+
+- HCS starts with an empty graph and iteratively adds, removes, or reverses edges.
+- The process is guided by the K2Score, which ensures the best-scoring acyclic BN is found.
+
+#### Parameter Learning with Maximum Likelihood Estimation (MLE)
+- Once the structure is learned, MaximumLikelihoodEstimator estimates probability distributions for each node given its parent nodes.
+- These CPTs allow inference of unknown variables based on evidence.
+
+#### Inference Using Variable Elimination
+- Queries were performed to find the most probable macronutrient composition given a specific calorie range.
+- Example result: Given calorie_category = 0-250 kcal, the most probable (protein, fat, carb) combination is (10-20 g, 25-50 g, 75+ g) with probability 0.129.
+
+## Milestone 2 Original Content
+
 ### Explain what your AI agent does in terms of PEAS.  What is the "world" like?
 **Performance**<br />
 Our agent aims to generate meal recommendations which balance nutritional quality (specifically calories, proteins, fats, and carbohydrates) with recipe simplicity (lower number of ingredients).  The concept of fewer ingredients indirectly and approximately supports our goal of optimizing nutritional meal plans while balancing financial constraints.
@@ -65,35 +153,39 @@ We can absolutely improve upon our data preprocessing pipeline to make it much m
 
 Our first plan was to use an ingredient price API, but further working on the project revealed that we faced a massive paywall and were not able to navigate around it.  Thus, we consulted _ChatGPT_ on how to change our plans from using a Bayesian Network to balance high nutritional content and least financial burden to a consideration of high nutritional content and _lessened ingredient complexity_.  
 
-**Questions asked ChatGPT**
-1. "We're developing a Bayesian Network based on nutrition and cost, but we do not have a free-to-use ingredient cost API.  What is another way we can build a Bayesian Network using recipe data?  We have access to certain nutritional values, ingredient lists, and their respective recipes."
+### Questions Asked ChatGPT
 
-**(o3-mini-high) Response:**<br />
-> You can sidestep the need for a cost API by leveraging the recipe data you already have to infer cost estimates indirectly. Here are a few approaches:
+#### 1. "We're developing a Bayesian Network based on nutrition and cost, but we do not have a free-to-use ingredient cost API. What is another way we can build a Bayesian Network using recipe data? We have access to certain nutritional values, ingredient lists, and their respective recipes."
 
-> Latent Variable Modeling:
-> Treat cost as a latent (hidden) variable in your Bayesian Network. If you have any recipes where total cost is known (even if it's just a few examples), you can use those to learn the relationships between ingredient presence, nutritional values, and overall cost. Once the network is trained, it can estimate cost for new recipes based solely on their ingredients and nutritional profiles.
+**Response:**  
+You can sidestep the need for a cost API by leveraging the recipe data you already have to infer cost estimates indirectly. Here are a few approaches:
 
-> Proxy Cost Estimation:
-> Instead of direct cost data, you might assign proxy cost values to ingredients based on factors like market availability, rarity, or even typical quantities used in recipes. You can then build your network where these proxies contribute to the overall recipe cost. Over time, you can refine these proxies by comparing against any known cost benchmarks or aggregated pricing data you might find from other sources (like grocery store reports or market research).
+- **Latent Variable Modeling:**  
+  Treat cost as a latent (hidden) variable in your Bayesian Network. If you have any recipes where total cost is known (even if it's just a few examples), you can use those to learn the relationships between ingredient presence, nutritional values, and overall cost. Once the network is trained, it can estimate cost for new recipes based solely on their ingredients and nutritional profiles.
 
-> Data-Driven Cost Inference:
-> If you have a large dataset of recipes, you can use statistical techniques (e.g., regression analysis) to correlate certain nutritional or ingredient features with estimated cost. For instance, recipes that include certain ingredients might, on average, be more expensive. These correlations can then be encoded as conditional probabilities within your Bayesian Network.
+- **Proxy Cost Estimation:**  
+  Instead of direct cost data, you might assign proxy cost values to ingredients based on factors like market availability, rarity, or even typical quantities used in recipes. You can then build your network where these proxies contribute to the overall recipe cost. Over time, you can refine these proxies by comparing against any known cost benchmarks or aggregated pricing data you might find from other sources (like grocery store reports or market research).
 
-> By relying on your available nutritional values and ingredient lists, you can learn the relationships that drive cost, even without a direct cost API. This approach not only makes use of the data at hand but also provides flexibility to update your model as more cost-related data becomes available.
+- **Data-Driven Cost Inference:**  
+  If you have a large dataset of recipes, you can use statistical techniques (e.g., regression analysis) to correlate certain nutritional or ingredient features with estimated cost. For instance, recipes that include certain ingredients might, on average, be more expensive. These correlations can then be encoded as conditional probabilities within your Bayesian Network.
 
-2. "Is the proxy of balancing the number of ingredients and substituting our loss of financial cost as a balancing factor a reasonable idea?"
+By relying on your available nutritional values and ingredient lists, you can learn the relationships that drive cost, even without a direct cost API. This approach not only makes use of the data at hand but also provides flexibility to update your model as more cost-related data becomes available.
 
-**(o3-mini-high) Response:** <br /> 
-> Using the number of ingredients as a proxy can be a reasonable starting point, especially if you lack direct financial data. However, there are some important considerations:
+---
 
-> Correlation vs. Causation:
-> The number of ingredients might correlate with cost (e.g., more ingredients can mean higher cost), but this isn't always the case. A recipe with fewer, high-cost ingredients might be more expensive than one with many low-cost ingredients.
+#### 2. "Is the proxy of balancing the number of ingredients and substituting our loss of financial cost as a balancing factor a reasonable idea?"
 
-> Ingredient Variability:
-> Not all ingredients have the same cost impact. You might consider weighting ingredients differently if you have some data on their typical cost ranges or nutritional value correlations.
+**Response:**  
+Using the number of ingredients as a proxy can be a reasonable starting point, especially if you lack direct financial data. However, there are some important considerations:
 
-> Model Flexibility:
-> Treating cost as a latent or proxy variable is a valid approach in a Bayesian Network. As you collect more data or refine your proxies, you can update the network to reflect a more nuanced view of cost.
+- **Correlation vs. Causation:**  
+  The number of ingredients might correlate with cost (e.g., more ingredients can mean higher cost), but this isn't always the case. A recipe with fewer, high-cost ingredients might be more expensive than one with many low-cost ingredients.
 
-> In summary, balancing the number of ingredients as a proxy for financial cost is a reasonable idea as long as you're aware of its limitations and are open to refining your approach with additional data or weighting factors when possible.
+- **Ingredient Variability:**  
+  Not all ingredients have the same cost impact. You might consider weighting ingredients differently if you have some data on their typical cost ranges or nutritional value correlations.
+
+- **Model Flexibility:**  
+  Treating cost as a latent or proxy variable is a valid approach in a Bayesian Network. As you collect more data or refine your proxies, you can update the network to reflect a more nuanced view of cost.
+
+**Summary:**  
+Balancing the number of ingredients as a proxy for financial cost is a reasonable idea as long as you're aware of its limitations and are open to refining your approach with additional data or weighting factors when possible.
