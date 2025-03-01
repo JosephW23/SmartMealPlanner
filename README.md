@@ -46,7 +46,45 @@ The Bayesian Network consists of the following nodes:
 - carb_category → protein_category  
 - carb_category → calorie_category  
 - carb_category → fat_category
+
 ### Diagram:
+![](Diagram.png)
+
+## Data Preprocessing Overview
+
+### Dataset Details
+
+- The dataset originates from recipeNLG.csv and USDA nutrient files.
+- Irrelevant columns such as link, source, and directions were dropped.
+- Ingredients were extracted and cleaned to remove measurement units and amounts.
+- A mapping system matched ingredient names to their USDA nutrient profile.
+
+### Feature Engineering
+
+- num_ingredients: The count of ingredients in a recipe.
+- Macronutrients (calories, protein, fat, carbohydrates) were derived from USDA data.
+- Categories were created for these features using binning methods:
+  - calorie_category: Ranges 0-250 kcal, 250-500 kcal, etc.
+  - protein_category: Ranges 0-10g, 10-20g, etc.
+  - fat_category: Ranges 0-25g, 25-50g, etc.
+  - carb_category: Ranges 0-25g, 25-50g, etc.
+
+## Machine Learning Estimation Explanation
+
+### Structure Learning with Hill Climb Search (HCS)
+
+- HCS starts with an empty graph and iteratively adds, removes, or reverses edges.
+- The process is guided by the K2Score, which ensures the best-scoring acyclic BN is found.
+
+### Parameter Learning with Maximum Likelihood Estimation (MLE)
+- Once the structure is learned, MaximumLikelihoodEstimator estimates probability distributions for each node given its parent nodes.
+- These CPTs allow inference of unknown variables based on evidence.
+
+### Inference Using Variable Elimination
+- Queries were performed to find the most probable macronutrient composition given a specific calorie range.
+- Example result: Given calorie_category = 0-250 kcal, the most probable (protein, fat, carb) combination is (10-20 g, 25-50 g, 75+ g) with probability 0.129.
+
+
 
 ### Explain what your AI agent does in terms of PEAS.  What is the "world" like?
 **Performance**<br />
