@@ -13,12 +13,40 @@
 ### Updates for Regrade (WIP do not submit):
 1. Must dos for code explanations:
 - Explain scipy.stats
+  - The scipy.stats module in SciPy is a statistical library that includes functions for probability distributions, statistical tests, and descriptive statistics. It was used in our project to assess data distributions and create probability-based insights that are critical for the Bayesian Network construction.
 - Explain pgmpy.models import BayesianNetwork
+  - pgmpy.models.BayesianNetwork is the fundamental class for building Bayesian Networks . It allows us to create a Directed Acyclic Graph in which nodes represent variables and edges represent dependencies. The model structure is enhanced with algorithms such as Hill Climb Search and K2 Score which we use in our project.
 - Explain pgmpy.estimators import MaximumLikelihoodEstimator
+  - This is an estimator that is used to generate Conditional Probability Tables (CPTs) for the Bayesian Network. Given the network structure and observed data, MaximumLikelihoodEstimator calculates the probability distributions for each node in the DAG based on its parents.
 - Explain pgmpy.inference import VariableElimination
+  - An inference process called variable elimination aids in the Bayesian Network's response to probabilistic inquiries. In order to calculate conditional probabilities, it marginalizes variables that are not important. Given calorie limits, it was utilized in our project to identify the most likely macronutrient composition category.
 - Explain pgmy.estimators import HillClimbSearch, K2Score (needed to fix the horrible structure of original Bayesian Network where everything was interdependent, this ensured no directed cycles in Bayesian Network).
+  - Hill Climb Search (HCS) is a structure-learning method that gradually refines the BN by adding, deleting, or reversing edges in order to optimize a score function.K2 Score is a scoring function that evaluates the BN structure. It ensures correct DAG generation by eliminating cycles and increasing the likelihood of observed data. 
 
 2. Must address direct comments in Gradescope
+## Bayesian Network Structure
+
+### Nodes
+The Bayesian Network consists of the following nodes:
+
+- **num_ingredients** – Number of ingredients in a food item  
+- **calorie_category** – Categorized calorie levels  
+- **protein_category** – Categorized protein levels  
+- **fat_category** – Categorized fat levels  
+- **carb_category** – Categorized carbohydrate levels
+
+### Directed Edges
+- num_ingredients → calorie_category  
+- num_ingredients → fat_category  
+- num_ingredients → protein_category  
+- num_ingredients → carb_category  
+- fat_category → calorie_category  
+- protein_category → fat_category  
+- protein_category → calorie_category  
+- carb_category → protein_category  
+- carb_category → calorie_category  
+- carb_category → fat_category
+### Diagram:
 
 ### Explain what your AI agent does in terms of PEAS.  What is the "world" like?
 **Performance**<br />
