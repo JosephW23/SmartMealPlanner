@@ -10,32 +10,40 @@
 
 # Milestone 2
 
-### Updates for Regrade (WIP do not submit):
-1. Must dos for code explanations:
-- Explain scipy.stats
-  - The scipy.stats module in SciPy is a statistical library that includes functions for probability distributions, statistical tests, and descriptive statistics. It was used in our project to assess data distributions and create probability-based insights that are critical for the Bayesian Network construction.
-- Explain pgmpy.models import BayesianNetwork
-  - pgmpy.models.BayesianNetwork is the fundamental class for building Bayesian Networks . It allows us to create a Directed Acyclic Graph in which nodes represent variables and edges represent dependencies. The model structure is enhanced with algorithms such as Hill Climb Search and K2 Score which we use in our project.
-- Explain pgmpy.estimators import MaximumLikelihoodEstimator
-  - This is an estimator that is used to generate Conditional Probability Tables (CPTs) for the Bayesian Network. Given the network structure and observed data, MaximumLikelihoodEstimator calculates the probability distributions for each node in the DAG based on its parents.
-- Explain pgmpy.inference import VariableElimination
-  - An inference process called variable elimination aids in the Bayesian Network's response to probabilistic inquiries. In order to calculate conditional probabilities, it marginalizes variables that are not important. Given calorie limits, it was utilized in our project to identify the most likely macronutrient composition category.
-- Explain pgmy.estimators import HillClimbSearch, K2Score (needed to fix the horrible structure of original Bayesian Network where everything was interdependent, this ensured no directed cycles in Bayesian Network).
-  - Hill Climb Search (HCS) is a structure-learning method that gradually refines the BN by adding, deleting, or reversing edges in order to optimize a score function.K2 Score is a scoring function that evaluates the BN structure. It ensures correct DAG generation by eliminating cycles and increasing the likelihood of observed data. 
+## Milestone 2 Regrade Updates
+### SciPy and pgmpy Usage in Bayesian Network Construction
 
-2. Must address direct comments in Gradescope
-## Bayesian Network Structure
+#### **1. `scipy.stats`**  
+The `scipy.stats` module in SciPy is a statistical library that includes functions for probability distributions, statistical tests, and descriptive statistics. It was used in our project to assess data distributions and create probability-based insights that are critical for the Bayesian Network construction.
 
-### Nodes
+#### **2. `pgmpy.models import BayesianNetwork`**  
+`pgmpy.models.BayesianNetwork` is the fundamental class for building Bayesian Networks. It allows us to create a Directed Acyclic Graph (DAG) in which nodes represent variables and edges represent dependencies. The model structure is enhanced with algorithms such as **Hill Climb Search** and **K2 Score**, which we use in our project.
+
+#### **3. `pgmpy.estimators import MaximumLikelihoodEstimator`**  
+This estimator is used to generate **Conditional Probability Tables (CPTs)** for the Bayesian Network. Given the network structure and observed data, `MaximumLikelihoodEstimator` calculates the probability distributions for each node in the DAG based on its parents.
+
+#### **4. `pgmpy.inference import VariableElimination`**  
+An inference process called **Variable Elimination** aids in the Bayesian Network's response to probabilistic inquiries. To calculate conditional probabilities, it marginalizes variables that are not important. Given calorie limits, it was utilized in our project to identify the most likely **macronutrient composition category**.
+
+#### **5. `pgmpy.estimators import HillClimbSearch, K2Score`**  
+(Needed to fix the horrible structure of the original Bayesian Network, where everything was interdependent—this ensured no directed cycles in the Bayesian Network).  
+
+- **Hill Climb Search (HCS):** A structure-learning method that gradually refines the Bayesian Network by adding, deleting, or reversing edges in order to optimize a score function.  
+- **K2 Score:** A scoring function that evaluates the BN structure. It ensures correct DAG generation by eliminating cycles and increasing the likelihood of observed data.
+
+---
+
+### Bayesian Network Structure
+#### Nodes
 The Bayesian Network consists of the following nodes:
 
-- **num_ingredients** – Number of ingredients in a food item  
-- **calorie_category** – Categorized calorie levels  
-- **protein_category** – Categorized protein levels  
-- **fat_category** – Categorized fat levels  
-- **carb_category** – Categorized carbohydrate levels
+- **`num_ingredients`** – Number of ingredients in a food item  
+- **`calorie_category`** – Categorized calorie levels  
+- **`protein_category`** – Categorized protein levels  
+- **`fat_category`** – Categorized fat levels  
+- **`carb_category`** – Categorized carbohydrate levels
 
-### Directed Edges
+#### Directed Edges
 - num_ingredients → calorie_category  
 - num_ingredients → fat_category  
 - num_ingredients → protein_category  
@@ -47,19 +55,21 @@ The Bayesian Network consists of the following nodes:
 - carb_category → calorie_category  
 - carb_category → fat_category
 
-### Diagram:
+Since there is no directed cycle in this graph, and thus this graph is a Directed Acyclic Graph, this results in a valid Bayesian Network formation.
+
+#### Generated Diagram:
 ![](Diagram.png)
 
-## Data Preprocessing Overview
+### Data Preprocessing Overview
 
-### Dataset Details
+#### Dataset Details
 
 - The dataset originates from recipeNLG.csv and USDA nutrient files.
 - Irrelevant columns such as link, source, and directions were dropped.
 - Ingredients were extracted and cleaned to remove measurement units and amounts.
 - A mapping system matched ingredient names to their USDA nutrient profile.
 
-### Feature Engineering
+#### Feature Engineering
 
 - num_ingredients: The count of ingredients in a recipe.
 - Macronutrients (calories, protein, fat, carbohydrates) were derived from USDA data.
@@ -68,23 +78,26 @@ The Bayesian Network consists of the following nodes:
   - protein_category: Ranges 0-10g, 10-20g, etc.
   - fat_category: Ranges 0-25g, 25-50g, etc.
   - carb_category: Ranges 0-25g, 25-50g, etc.
+ 
+---
 
-## Machine Learning Estimation Explanation
+### Machine Learning Estimation Explanation
 
-### Structure Learning with Hill Climb Search (HCS)
+#### Structure Learning with Hill Climb Search (HCS)
 
 - HCS starts with an empty graph and iteratively adds, removes, or reverses edges.
 - The process is guided by the K2Score, which ensures the best-scoring acyclic BN is found.
 
-### Parameter Learning with Maximum Likelihood Estimation (MLE)
+#### Parameter Learning with Maximum Likelihood Estimation (MLE)
 - Once the structure is learned, MaximumLikelihoodEstimator estimates probability distributions for each node given its parent nodes.
 - These CPTs allow inference of unknown variables based on evidence.
 
-### Inference Using Variable Elimination
+#### Inference Using Variable Elimination
 - Queries were performed to find the most probable macronutrient composition given a specific calorie range.
 - Example result: Given calorie_category = 0-250 kcal, the most probable (protein, fat, carb) combination is (10-20 g, 25-50 g, 75+ g) with probability 0.129.
 
 
+## Milestone 2 Original Content
 
 ### Explain what your AI agent does in terms of PEAS.  What is the "world" like?
 **Performance**<br />
