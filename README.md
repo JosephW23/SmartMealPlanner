@@ -2,7 +2,8 @@
 - Joseph Whiteman, David Sanchez
 
 ## Links to our Milestones: 
-- [Milestone 2](https://github.com/JosephW23/SmartMealPlanner/blob/main/Main.ipynb)
+- [Milestone 2 Main.ipynb](https://github.com/JosephW23/SmartMealPlanner/blob/Milestone2/Main.ipynb)
+- [Milestone 2 Homepage](https://github.com/JosephW23/SmartMealPlanner/tree/Milestone2)
 
 ### Datasets
 - **Kaggle RecipeNLG Database**: https://www.kaggle.com/datasets/saldenisov/recipenlg
