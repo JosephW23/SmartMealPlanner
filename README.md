@@ -96,7 +96,6 @@ Since there is no directed cycle in this graph, and thus this graph is a Directe
 - Queries were performed to find the most probable macronutrient composition given a specific calorie range.
 - Example result: Given calorie_category = 0-250 kcal, the most probable (protein, fat, carb) combination is (10-20 g, 25-50 g, 75+ g) with probability 0.129.
 
-
 ## Milestone 2 Original Content
 
 ### Explain what your AI agent does in terms of PEAS.  What is the "world" like?
