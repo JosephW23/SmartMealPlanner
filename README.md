@@ -95,7 +95,7 @@ Since there is no directed cycle in this graph, and thus this graph is a Directe
 
 #### Inference Using Variable Elimination
 - Queries were performed to find the most probable macronutrient composition given a specific calorie range.
-- Example result: Given calorie_category = 0-250 kcal, the most probable (protein, fat, carb) combination is (10-20 g, 25-50 g, 75+ g) with probability 0.129.
+- Example result: Most probable (Protein, Fat, Carb, Ingredients) recommendation given query: Protein = 10-15 g, Fat = 0-10 g, Carbs = 25-50 g, Ingredients = 3-5 (P=0.0172)
 
 ## Milestone 2 Original Content
 
