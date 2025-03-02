@@ -45,16 +45,16 @@ The Bayesian Network consists of the following nodes:
 - **`carb_category`** – Categorized carbohydrate levels
 
 #### Directed Edges
-- num_ingredients → calorie_category  
-- num_ingredients → fat_category  
-- num_ingredients → protein_category  
-- num_ingredients → carb_category  
-- fat_category → calorie_category  
-- protein_category → fat_category  
-- protein_category → calorie_category  
-- carb_category → protein_category  
-- carb_category → calorie_category  
+- calorie_category → ingredient_category
+- protein_category → fat_category
+- protein_category → ingredient_category
+- protein_category → calorie_category
+- fat_category → calorie_category
+- fat_category → ingredient_category
+- carb_category → protein_category
+- carb_category → calorie_category
 - carb_category → fat_category
+- carb_category → ingredient_category
 
 Since there is no directed cycle in this graph, and thus this graph is a Directed Acyclic Graph, this results in a valid Bayesian Network formation.
 
