@@ -59,7 +59,7 @@ The Bayesian Network consists of the following nodes:
 Since there is no directed cycle in this graph, and thus this graph is a Directed Acyclic Graph, this results in a valid Bayesian Network formation.
 
 #### Generated Diagram:
-![](Diagram.png)
+![](UpdatedDiagram.png)
 
 ### Data Preprocessing Overview
 
