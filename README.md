@@ -75,10 +75,10 @@ Since there is no directed cycle in this graph, and thus this graph is a Directe
 - num_ingredients: The count of ingredients in a recipe.
 - Macronutrients (calories, protein, fat, carbohydrates) were derived from USDA data.
 - Categories were created for these features using binning methods:
-  - calorie_category: Ranges 0-250 kcal, 250-500 kcal, etc.
-  - protein_category: Ranges 0-10g, 10-20g, etc.
-  - fat_category: Ranges 0-25g, 25-50g, etc.
-  - carb_category: Ranges 0-25g, 25-50g, etc.
+  - calorie_category: Ranges 0-150 kcal, 150-300 kcal, etc.
+  - protein_category: Ranges 0-5 g, 5-10 g, etc.
+  - fat_category: Ranges 0-10 g, 10-20 g, etc.
+  - carb_category: Ranges 0-25 g, 25-50 g, etc.
  
 ---
 
@@ -95,7 +95,7 @@ Since there is no directed cycle in this graph, and thus this graph is a Directe
 
 #### Inference Using Variable Elimination
 - Queries were performed to find the most probable macronutrient composition given a specific calorie range.
-- Example result: Most probable (Protein, Fat, Carb, Ingredients) recommendation given query: Protein = 10-15 g, Fat = 0-10 g, Carbs = 25-50 g, Ingredients = 3-5 (P=0.0172)
+- Example result: Most probable (Protein, Fat, Carb, Ingredients) recommendation given query 150-300 kcal: Protein = 10-15 g, Fat = 0-10 g, Carbs = 25-50 g, Ingredients = 3-5 (P=0.0172)
 
 ## Milestone 2 Original Content
 
