@@ -9,6 +9,63 @@
 - **Kaggle RecipeNLG Database**: https://www.kaggle.com/datasets/saldenisov/recipenlg
 - **Branded Food Database**: https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_branded_food_csv_2024-10-31.zip
 
+# Milestone 3
+
+need to do: explain hmmlearn
+
+## Contributions
+
+### Questions asked ChatGPT
+
+#### 1. "I'm having trouble understanding how to dynamically score our meals since it can be very subjective, given our Milestone 3 objective of using an HMM to analyze meal timing and sequences to predict the best meal schedules based on a mix of performance metrics, i.e. user satisfaction, nutritional accuracy, diet adherence, and the number of ingredients as a proxy for cost efficiency.  And thus, we'll be tracking how meals are scheduled over time and how users respond to those recommendations, then optimize future recommendations based on past behavior.  But I'm having a hard time developing a scoring system, the packages necessary, and the general framework needed for this kind of system.  Do you have any ideas?"
+
+**Response:**  
+Below is an overview of one approach to dynamically score meals for your Milestone 3 objectives. This isn’t a fully baked solution—rather, it’s a framework to help you think through how you might combine these subjective metrics into a composite score that can then be used in an HMM.
+
+- **Define Your Key Performance Metrics:**  
+  You mentioned four main metrics: ser Satisfaction: (e.g., explicit ratings or implicit signals like repeat selections)
+
+  Nutritional Accuracy: How well does the meal meet nutritional guidelines?
+
+  Diet Adherence: Does the meal align with the user’s meal plan or past behavior?
+
+  Cost Efficiency (Proxy): Fewer ingredients are assumed to be more cost-efficient.
+
+  Because these metrics come from different domains, you’ll want to normalize them so that they can be combined.
+
+- **Normalization & Weighting:**  
+  Collect or simulate data for each meal. For example, nutritional accuracy might be calculated by comparing the meal’s macronutrients to a target range.
+
+  Normalize these scores (e.g., using MinMax scaling) so that each metric ranges between 0 and 1.
+
+  Assign weights based on your project priorities. For example, if nutritional accuracy and diet adherence are more important than cost efficiency, you might give them higher weights.
+
+- **Developing a Dynamic Framework:**  
+  Your framework could have these components:
+  
+  Data Collection:
+  Gather user feedback (satisfaction) and compute the other metrics from your dataset (nutritional values, ingredient counts). For now, you might simulate satisfaction ratings if real data isn’t available.
+
+  Scoring Module:
+  Write a function that takes a meal’s features and returns a composite score based on your weighted formula. Use packages like NumPy and scikit-learn (for normalization).
+
+  Time-Series Component:
+  Since you want to analyze sequences, your system should update these scores over time. You could store a rolling average of a user’s satisfaction or adherence for meals in a given time window.
+
+  HMM Integration:
+  Feed the sequence of composite scores (or even the vector of individual normalized metrics) into your HMM. The HMM then learns transition probabilities between different “states” of meal quality or adherence. In this way, your HMM isn’t directly scoring meals—it’s learning how a user’s composite meal quality evolves over time, and you can use it to predict future states.
+
+  By relying on your available nutritional values and ingredient lists, you can learn the relationships that drive cost, even without a direct cost API. This approach not only makes use of the data at hand but also provides flexibility to update your model as more cost-related data becomes available.
+
+- **Suggested Packages and Tools:**
+  NumPy & Pandas: For data manipulation and numerical calculations.
+
+  Scikit-learn: For normalization (e.g., MinMaxScaler) and possibly clustering to get an initial sense of meal groupings.
+
+  hmmlearn: For the Hidden Markov Model part.
+
+  Matplotlib or Seaborn: For visualizing the distribution of scores and HMM transitions (if needed).
+
 # Milestone 2
 
 ## Milestone 2 Regrade Updates
