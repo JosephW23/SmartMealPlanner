@@ -4,14 +4,185 @@
 ## Links to our Milestones: 
 - [Milestone 2 Main.ipynb](https://github.com/JosephW23/SmartMealPlanner/blob/Milestone2/Main.ipynb)
 - [Milestone 2 Homepage](https://github.com/JosephW23/SmartMealPlanner/tree/Milestone2)
+- [Milestone 3 Main.ipynb](https://github.com/JosephW23/SmartMealPlanner/blob/Milestone3/Main.ipynb)
+- [Milestone 3 Homepage](https://github.com/JosephW23/SmartMealPlanner/tree/Milestone3)
 
 ### Datasets
 - **Kaggle RecipeNLG Database**: https://www.kaggle.com/datasets/saldenisov/recipenlg
 - **Branded Food Database**: https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_branded_food_csv_2024-10-31.zip
 
-# Milestone 3
+# Milestone 3: Hidden Markov Model Implementation
 
-need to do: explain hmmlearn
+### Describe your agent in terms of PEAS and give a background of your task at hand.
+
+**Performance**<br />
+Our agent's performance is evaluated based on its ability to classify recipes by an individual's behavioral diet adherence states using a Hidden Markov Model.  These states are labeled as `Healthy`, `Normal`, and `Unhealthy`, wherein we make the reasonable assumption that an individual who adheres to certain recipes should be labeled with a general health category.  These states are stored in `predicted_behavior`.
+
+We evaluate the model as such:
+
+1. HMM Transition Probabilities - We analyze the frequency at which the model transitions between states.
+2. State Assignments - We ensure that recipes are meaningfully grouped into their proper categories across `Healthy`, `Normal`, and `Unhealthy`.
+3. Baseline Comparison - We categorize bins through simple heuristics of nutritional content using a weighted scoring measure to award the agent based on our definitions of health.
+
+**Environment**<br />
+Our agent operates on the RecipeNLG dataset, wherein after Milestone 2 (below), our data consists of the following columns:
+- `title`: Recipe names
+- `calorie_category`, `protein_category`, `fat_category`, `carb_category`, `ingredient_category`: Nutritional content of recipes by unit
+- `satisfaction`, `diet_adherence`: User preferences and observed behavior
+
+Our preprocessing steps include:
+1. Transforming categorical bins into interpretable numerical values for our agent
+2. Scaling features for efficient data processing using `MinMaxScaler()`
+3. Using a weighted `score` to quantify meal quality
+
+**Actuators**<br />
+Our agent assigns recipes one of three hidden behavioral dietary states, with the label denoting recipes that such an individual would adhere to eating consistently.
+
+- `Healthy`: A broad generalization of recipes which have high protein, average fats, and low carbs and the "healthy" individual who would consistently adhere to these recipes
+- `Normal`: A broad generalization of recipes which have medium protein, average fats, and medium carbs and the "normal" individual who would consistently adhere to these recipes
+- `Unhealthy`: A broad generalization of recipes which have low protein, higher fats, and high carbs and the "unhealthy" individual who would consistently adhere to these recipes
+
+These states are inferred using the Hidden Markov Model and are stored in the `adherence` column.
+
+**Sensors**<br />
+The Hidden Markov Model takes in:
+
+- Normalized nutritional features: `calorie_category`, `protein_category`, `fat_category`, `carb_category`
+- User preference factors: `satisfaction`, `diet_adherence`
+- Score: A weighted evaluation based on the relative importance of all six aforementioned factors, which serves as input to our HMM.
+
+#### Packages Used
+
+##### `from hmmlearn import hmm`
+
+**Hidden State Learning using a Gaussian Hidden Markov Model**<br />
+
+- `hmm` provides a Gaussian Hidden Markov Model, which is a probabilistic model that assumes hidden states underlie our observed data.
+- This Gaussian HMM allows us to model sequential patterns and latent state transitions, which our Bayesian Network was only able to capture static dependencies.
+- We initialize our model using three hidden behavioral dietary states: `Healthy`, `Normal`, and `Unhealthy`.
+
+**State Transition Learning**<br />
+
+- `hmm` provides the necessary infrastructure of the Expectation-Maximization algorithm for our Hidden Markov Model to learn a dietary state transition matrix from our observed data.
+
+**Parameter Estimation with Maximum Likelihood**<br />
+
+- Given our calculated weighed scores, our HMM then estimates: (1) initial state probabilities, (2) transition probabilities, and (3) emission probabilities, all using Maximum Likelihood Estimation
+
+**Difference between Conventional HMM and Gaussian HMM**<br />
+
+According to our research, conventional HMMs work with discrete observations, where Gaussian HMMs work with continuous observations; although our original nutritional features, that being `calorie_category`, `protein_category`, etc, were binned into certain numerical categories, these values were later scaled into continuous numerical observations for our Gaussian HMM.  Furthermore, the recipe scoring system and transformed feature values are indeed continuous; as a result, we believe that a Gaussian HMM using `from hmmlearn import hmm` is the correct tool to capture uncertainty in meal classification using our scoring methodology.
+
+### Agent Setup, Data Preprocessing, and Training Setup
+
+The RecipeNLG dataset contains well over one million recipes, but our preprocessing steps throughout Milestone 2 has brought the size down to a manageable size of 100,000 rows; by clearing out null values, removing rows with ambiguous units and/or measurement sizes, we were able to avoid intensive preprocessing for Milestone 3.
+
+#### Milestone 3 Preprocessing
+
+1. Convert categorical bins (e.g. for `calorie_category`, "100-200 kcal") into numeric ranges using our `bin_to_numeric()` function
+
+2. Normalize these features and their numeric ranges using `MinMaxScaler()` 
+
+3. Use our relative weight list to compute a nutritional value score for each recipe, where a higher positive scalar represents higher reward if a higher nutritional value is found in its respective category; negative scalars represent punishment to that nutritional value
+
+> `satisfaction`: 0.25
+> `diet_adherence:` 0.30
+> `ingredient_category`: 0.20
+> `protein_category`: 0.50
+> `fat_category`: 0.10
+> `carb_category`: -0.50
+> `calorie_category`: 0.30
+
+4. Use the score as input for our HMM training
+
+### Training Our Model
+
+We initialize our HMM as such:
+
+```
+model = hmm.GaussianHMM(n_components = 3, n_iter = 100, random_state = 101)
+model.fit(observations) 
+```
+
+1. Parameters: Our HMM is initialized with the assumption of 3 hidden dietary behavioral states, with 100 iterations of its EM algorithm to train the HMM, with a random state seed set to ensure reproducibility of our results
+
+2. Our observations are the scaled scores of our recipes, which our model will train upon
+
+We then assign our hidden states using the labels `Healthy`, `Normal`, and `Unhealthy` using the following:
+
+```
+state_means = user_data.groupby("predicted_behavior")["score"].mean().sort_values(ascending=False)
+mapping = {state_means.index[0]: "Healthy", state_means.index[1]: "Normal", state_means.index[2]: "Unhealthy"}
+user_data["adherence"] = user_data["predicted_behavior"].map(mapping)
+```
+
+### Conclusion and Results
+
+**Heatmap of Transition Matrix**<br />
+
+We plot a heatmap to visualize our HMM transition matrix using the following code:
+
+```
+trans_mat = model.transmat_
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(trans_mat, annot=True, cmap="Blues",
+            xticklabels=[f"State {i}" for i in range(trans_mat.shape[1])],
+            yticklabels=[f"State {i}" for i in range(trans_mat.shape[0])])
+plt.xlabel("Next State")
+plt.ylabel("Current State")
+plt.title("HMM Transition Matrix")
+plt.show()
+```
+
+![](transition_matrix.png)
+
+**Findings**<br />
+
+1. State 0 (`Healthy`): 
+- 19% chance of remaining in the `Healthy` state
+- 28% chance of transitioning to the `Normal` state
+- 53% chance of transitioning to the `Unhealthy` state
+
+2. State 1 (`Normal`)
+- 2.4% chance of transitioning to the `Healthy` state
+- 34% chance of remaining in the `Normal` state
+- 63% chance of transitioning to the `Unhealthy` state
+
+3. State 2 (`Unhealthy`)
+- 93% chance of transitioning to the `Healthy` state
+- <1% chance of transitioning to the `Normal` state
+- 6% chance of remaining in the `Unhealthy` state
+
+Clearly, given our recipe dataset and how we've categorized the bins, we were not able to award persistence and discipline as much as we've initially planned in our creation of this project.  Above everything else, we have observed a substantial preference toward major swings to opposite ends of the spectrum: we see a 53% chance of moving from Healthy recipes to Unhealthy recipes, a 63% chance of moving from Normal recipes to Unhealthy recipes, and interestingly enough, an overwhelming **93% chance** of transitioning from Unhealthy recipes to Healthy recipes; such a high probability warrants deep investigation.
+
+**Potential Improvements and Notes**
+
+We may have a misbalanced scoring mechanism, and had we had another Milestone, we would have revisited this mechanism.  It could be argued that we disproportionately reward protein count and underemphasize carbohydrate count, and thus may overemphasize these two features; this could also have contributed to the extreme swings in behavior that the HMM has predicted.
+
+Our binning techniques may have been too broad, despite our best efforts to making more bins in more concentrated areas:
+
+![](distribution_image.png)
+
+We attempted to bin using these categorizations, and should we have had another Milestone, we would have revisited these bins to see if we could improve upon them.  But we also must prioritize performance of training and the number of bins, as we could oversaturate the model's training with too many bins.
+
+```
+calorie_edges = [-np.inf, 150, 300, 450, 600, 750, 1000, 1500, np.inf]
+protein_edges = [-np.inf, 5, 10, 15, 20, 30, 40, 50, 75, np.inf]
+fat_edges = [-np.inf, 10, 20, 30, 40, 50, 75, 100, np.inf]
+carb_edges = [-np.inf, 25, 50, 75, 100, 200, 300, 400, 500, np.inf]
+ingredient_edges = [-np.inf, 3, 5, 7, 9, 11, np.inf]
+```
+
+The number of assumed latent states (i.e. `Healthy`, `Normal`, and `Unhealthy`) may have been too little.  This may have caused such drastic swings in transition probabilities across these three states to move toward more polarized sides.
+
+As mentioned in Milestone 2, a major limitation of our data preprocessing was the sheer number of rows excluded due to two reasons:
+
+1. Ambiguous recipe measurements in RecipeNLG
+2. Broad Regex filtering in Milestone 2 of data
+
+There are simply either too many ambiguous measurements (i.e. "A jar of") and not enough nutritional value matching in our corresponding data sets to ensure a totally accurate representation of the nutritional value of each recipe.  As an example, we observed irregularly high carbohydrate values across `Healthy`, `Normal`, and `Unhealthy`, which is absolutely a result of our preprocessing and handling of edge case values across the RecipeNLG dataset.  This may have also caused such drastic swings in our transition matrix as well.
+
 
 ## Contributions
 
@@ -66,7 +237,7 @@ Below is an overview of one approach to dynamically score meals for your Milesto
 
   Matplotlib or Seaborn: For visualizing the distribution of scores and HMM transitions (if needed).
 
-# Milestone 2
+# Milestone 2: Bayesian Network
 
 ## Milestone 2 Regrade Updates
 ### SciPy and pgmpy Usage in Bayesian Network Construction
