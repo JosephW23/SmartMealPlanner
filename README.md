@@ -13,7 +13,7 @@
 
 # Milestone 3: Hidden Markov Model Implementation
 
-### Describe your agent in terms of PEAS and give a background of your task at hand.
+## Describe your agent in terms of PEAS and give a background of your task at hand.
 
 **Performance**<br />
 Our agent's performance is evaluated based on its ability to classify recipes by an individual's behavioral diet adherence states using a Hidden Markov Model.  These states are labeled as `Healthy`, `Normal`, and `Unhealthy`, wherein we make the reasonable assumption that an individual who adheres to certain recipes should be labeled with a general health category.  These states are stored in `predicted_behavior`.
@@ -51,7 +51,7 @@ The Hidden Markov Model takes in:
 - User preference factors: `satisfaction`, `diet_adherence`
 - Score: A weighted evaluation based on the relative importance of all six aforementioned factors, which serves as input to our HMM.
 
-#### Packages Used
+## Packages Used
 
 ##### `from hmmlearn import hmm`
 
@@ -73,7 +73,7 @@ The Hidden Markov Model takes in:
 
 According to our research, conventional HMMs work with discrete observations, where Gaussian HMMs work with continuous observations; although our original nutritional features, that being `calorie_category`, `protein_category`, etc, were binned into certain numerical categories, these values were later scaled into continuous numerical observations for our Gaussian HMM.  Furthermore, the recipe scoring system and transformed feature values are indeed continuous; as a result, we believe that a Gaussian HMM using `from hmmlearn import hmm` is the correct tool to capture uncertainty in meal classification using our scoring methodology.
 
-### Agent Setup, Data Preprocessing, and Training Setup
+## Agent Setup, Data Preprocessing, and Training Setup
 
 The RecipeNLG dataset contains well over one million recipes, but our preprocessing steps throughout Milestone 2 has brought the size down to a manageable size of 100,000 rows; by clearing out null values, removing rows with ambiguous units and/or measurement sizes, we were able to avoid intensive preprocessing for Milestone 3.
 
@@ -95,7 +95,7 @@ The RecipeNLG dataset contains well over one million recipes, but our preprocess
 
 4. Use the score as input for our HMM training
 
-### Training Our Model
+## Training Our Model
 
 We initialize our HMM as such:
 
@@ -116,7 +116,7 @@ mapping = {state_means.index[0]: "Healthy", state_means.index[1]: "Normal", stat
 user_data["adherence"] = user_data["predicted_behavior"].map(mapping)
 ```
 
-### Conclusion and Results
+## Conclusion and Results
 
 **Heatmap of Transition Matrix**<br />
 
