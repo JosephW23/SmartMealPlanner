@@ -184,7 +184,7 @@ As mentioned in Milestone 2, a major limitation of our data preprocessing was th
 There are simply either too many ambiguous measurements (i.e. "A jar of") and not enough nutritional value matching in our corresponding data sets to ensure a totally accurate representation of the nutritional value of each recipe.  As an example, we observed irregularly high carbohydrate values across `Healthy`, `Normal`, and `Unhealthy`, which is absolutely a result of our preprocessing and handling of edge case values across the RecipeNLG dataset.  This may have also caused such drastic swings in our transition matrix as well.
 
 
-## Contributions
+## Contributions for Milestone 3
 
 ### Questions asked ChatGPT
 
