@@ -236,7 +236,7 @@ Below is an overview of one approach to dynamically score meals for your Milesto
   hmmlearn: For the Hidden Markov Model part.
 
   Matplotlib or Seaborn: For visualizing the distribution of scores and HMM transitions (if needed).
-
+<br /><br /><br />
 # Milestone 2: Bayesian Network
 
 ## Milestone 2 Regrade Updates
